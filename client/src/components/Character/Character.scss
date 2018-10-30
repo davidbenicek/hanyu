@@ -1,0 +1,105 @@
+@import '~bpk-mixins';
+
+.Character {
+  &__card {
+    min-height: 15.63rem;
+    padding: $bpk-spacing-base;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__char {
+    padding-top: $bpk-spacing-base;
+  }
+
+  &__type {
+    padding-top: $bpk-spacing-base;
+  }
+
+  &__example {
+    padding-top: $bpk-spacing-base;
+  }
+
+  &__translation {
+    background: #524c61;
+    padding: 5px;
+  }
+
+  &__translation:hover {
+    color: white;
+  }
+
+
+  &__authorContainer {
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__authorIcon {
+    display: inline;
+  }
+
+  &__authorUsername {
+    display: inline;
+    padding-left: $bpk-spacing-xs;
+  }
+
+  &__locationContainer {
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__locationIcon {
+    display: inline;
+  }
+
+  &__locationName {
+    display: inline;
+    padding-left: $bpk-spacing-xs;
+  }
+
+  &__iconContainer {
+    padding-top: $bpk-spacing-base;
+    list-style: none;
+
+    li {
+      display: inline;
+    }
+
+    ul {
+      display: inline;
+      padding: 0;
+      padding-right: $bpk-spacing-sm;
+    }
+  }
+  // stylelint-disable selector-class-pattern
+  &__upgrade {
+    &__icon {
+      position: relative;
+      float: right;
+      display: inline-block;
+      width: 14.38rem;
+      height: 3.75rem;
+      text-align: center;
+    }
+
+    &__card {
+      float: right;
+      display: flex;
+      min-width: 8.13rem;
+      height: 3.75rem;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+  // stylelint-enable selector-class-pattern
+}

@@ -1,0 +1,7 @@
+@import '~bpk-mixins';
+
+.ExerciseArea {
+  &__levelSelectors {
+    margin: $bpk-spacing-sm;
+  }
+}
