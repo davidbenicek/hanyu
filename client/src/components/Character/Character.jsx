@@ -18,8 +18,17 @@ class Character extends React.Component {
     this.fetchWord = this.fetchWord.bind(this);
     this.addExample = this.addExample.bind(this);
     this.renderExamples = this.renderExamples.bind(this);
+    this.previousWord = this.previousWord.bind(this);
 
-    this.state = { char: {}, charUp: true, examples: [], exampleCount: 0, examplesOut: false };
+    this.state = {
+      char: {},
+      charUp: props.charUp,
+      examples: [],
+      exampleCount: 0,
+      examplesOut: false,
+      backEnabled: false,
+      history: [],
+    };
     this.fetchWord();
   }
 
@@ -28,17 +37,32 @@ class Character extends React.Component {
   // }
 
   async fetchWord() {
-    const { levels } = this.props;
+    const { levels, charUp } = this.props;
     console.log(levels);
     const lvlQuery = Object.keys(levels).map(lvl => (
       (levels[lvl] ? lvl : '')
     )).join('');
     console.log(lvlQuery);
     const { data } = await axios({
-      url: '/char?level=' + lvlQuery,
+      url: `/char?level=${lvlQuery}`,
       method: 'get',
     });
-    this.setState({ char: data, charUp: true, examplesOut: false, exampleCount: 0, examples: [] });
+    const { history } = this.state;
+    history.push(data);
+    let backEnabled = false;
+    if (history.length > 1) {
+      backEnabled =  true;
+    }
+
+    this.setState({
+      char: data,
+      charUp,
+      examplesOut: false,
+      exampleCount: 0,
+      examples: [],
+      backEnabled,
+      history,
+    });
   }
 
   addExample() {
@@ -96,6 +120,16 @@ class Character extends React.Component {
     );
   }
 
+  previousWord() {
+    const { history } = this.state;
+    history.pop();
+    if (history.length <= 1) {
+      this.setState({ backEnabled: false });
+    }
+    const char = history[history.length - 1];
+    this.setState({ char, history });
+  }
+
   render() {
     return (
       <BpkGridRow>
@@ -106,11 +140,14 @@ class Character extends React.Component {
             </BpkCard>
           </BpkGridRow>
           <BpkGridRow>
-            <BpkGridColumn width={6}>
-              <BpkButton onClick={this.addExample} disabled={this.state.examplesOut}>Show example</BpkButton>
-            </BpkGridColumn>
-            <BpkGridColumn width={6}>
+            <BpkGridColumn width={4} tabletWidth={12}>
               <BpkButton onClick={this.fetchWord}>Next word</BpkButton>
+            </BpkGridColumn>
+            <BpkGridColumn width={4} tabletWidth={12}>
+              <BpkButton onClick={this.previousWord} disabled={!this.state.backEnabled}>Previous word</BpkButton>
+            </BpkGridColumn>
+            <BpkGridColumn width={4} tabletWidth={12}>
+              <BpkButton onClick={this.addExample} disabled={this.state.examplesOut}>Show example</BpkButton>
             </BpkGridColumn>
           </BpkGridRow>
           <BpkGridRow>
@@ -122,22 +159,13 @@ class Character extends React.Component {
   }
 }
 
-const iconType = PropTypes.shape({
-  src: PropTypes.string,
-  alt: PropTypes.string,
-  text: PropTypes.string,
-});
-
 Character.propTypes = {
-  levels: PropTypes.arrayOf(PropTypes.string),
-  // TODO: Implement reactions
+  levels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  charUp: PropTypes.bool,
 };
 
 Character.defaultProps = {
-  icons: [],
-  text: '',
-  user: '',
-  location: '',
+  charUp: true,
 };
 
 export default Character;

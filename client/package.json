@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "backpack-react-scripts": "5.2.1"
+    "backpack-react-scripts": "5.2.1",
+    "bpk-component-icon": "^3.23.20",
+    "bpk-component-modal": "^1.8.28"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +35,6 @@
     "react": "^16.6.0",
     "react-dom": "^16.6.0"
   },
-  "proxy": "http://localhost:1200/"
+  "proxy": "http://localhost:1200/",
+  "modules": "false"
 }
