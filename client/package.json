@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "backpack-react-scripts": "5.2.1",
+    "bpk-component-breakpoint": "^1.1.35",
     "bpk-component-icon": "^3.23.20",
     "bpk-component-modal": "^1.8.28"
   },

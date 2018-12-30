@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BpkGridRow, BpkGridColumn } from 'bpk-component-grid';
-import BpkTooltip from 'bpk-component-tooltip';
 import BpkText from 'bpk-component-text';
 import BpkCard from 'bpk-component-card';
 import BpkButton from 'bpk-component-button';
+import BpkBreakpoint, { BREAKPOINTS } from 'bpk-component-breakpoint';
+import BpkLongArrowRightIcon from 'bpk-component-icon/lg/long-arrow-right';
+import BpkLongArrowLeftIcon from 'bpk-component-icon/lg/long-arrow-left';
+import BpkLanguageIcon from 'bpk-component-icon/lg/language';
+import { withLargeButtonAlignment } from 'bpk-component-icon';
 import axios from 'axios';
 
 import STYLES from './Character.scss';
+
+const AlignedRightIcon = withLargeButtonAlignment(BpkLongArrowRightIcon);
+const AlignedLeftIcon = withLargeButtonAlignment(BpkLongArrowLeftIcon);
+const AlignedLanguageIcon = withLargeButtonAlignment(BpkLanguageIcon);
 
 class Character extends React.Component {
   constructor(props) {
@@ -38,11 +46,9 @@ class Character extends React.Component {
 
   async fetchWord() {
     const { levels, charUp } = this.props;
-    console.log(levels);
     const lvlQuery = Object.keys(levels).map(lvl => (
       (levels[lvl] ? lvl : '')
     )).join('');
-    console.log(lvlQuery);
     const { data } = await axios({
       url: `/char?level=${lvlQuery}`,
       method: 'get',
@@ -51,13 +57,17 @@ class Character extends React.Component {
     history.push(data);
     let backEnabled = false;
     if (history.length > 1) {
-      backEnabled =  true;
+      backEnabled = true;
+    }
+    let examplesOut = true;
+    if ('sentence1' in data) {
+      examplesOut = false;
     }
 
     this.setState({
       char: data,
       charUp,
-      examplesOut: false,
+      examplesOut,
       exampleCount: 0,
       examples: [],
       backEnabled,
@@ -81,7 +91,7 @@ class Character extends React.Component {
         this.setState({ examplesOut: true });
       }
     } else {
-      this.setState({ examplesOut: true });
+      this.setState({ examplesOut: false });
     }
   }
 
@@ -140,15 +150,29 @@ class Character extends React.Component {
             </BpkCard>
           </BpkGridRow>
           <BpkGridRow>
-            <BpkGridColumn width={4} tabletWidth={12}>
-              <BpkButton onClick={this.fetchWord}>Next word</BpkButton>
-            </BpkGridColumn>
-            <BpkGridColumn width={4} tabletWidth={12}>
-              <BpkButton onClick={this.previousWord} disabled={!this.state.backEnabled}>Previous word</BpkButton>
-            </BpkGridColumn>
-            <BpkGridColumn width={4} tabletWidth={12}>
-              <BpkButton onClick={this.addExample} disabled={this.state.examplesOut}>Show example</BpkButton>
-            </BpkGridColumn>
+            <BpkBreakpoint query={BREAKPOINTS.ABOVE_TABLET}>
+              <BpkGridColumn width={4} tabletWidth={12}>
+                <BpkButton onClick={this.addExample} disabled={this.state.examplesOut}>Show example</BpkButton>
+              </BpkGridColumn>
+              <BpkGridColumn width={4} tabletWidth={12}>
+                <BpkButton onClick={this.previousWord} disabled={!this.state.backEnabled}>Previous word</BpkButton>
+              </BpkGridColumn>
+              <BpkGridColumn width={4} tabletWidth={12}>
+                <BpkButton onClick={this.fetchWord}>Next word</BpkButton>
+              </BpkGridColumn>
+            </BpkBreakpoint>
+            <BpkBreakpoint query={BREAKPOINTS.TABLET}>
+              <BpkGridColumn width={4}>
+                <BpkButton iconOnly onClick={this.previousWord} disabled={!this.state.backEnabled}><AlignedLeftIcon /></BpkButton>
+              </BpkGridColumn>
+              <BpkGridColumn width={4}>
+                <BpkButton iconOnly onClick={this.addExample} disabled={this.state.examplesOut}><AlignedLanguageIcon /></BpkButton>
+              </BpkGridColumn>
+              <BpkGridColumn width={4}>
+                <BpkButton iconOnly onClick={this.fetchWord}><AlignedRightIcon /></BpkButton>
+              </BpkGridColumn>
+            </BpkBreakpoint>
+
           </BpkGridRow>
           <BpkGridRow>
             {this.renderExamples()}

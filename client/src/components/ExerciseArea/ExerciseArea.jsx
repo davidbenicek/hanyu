@@ -20,26 +20,28 @@ class ExerciseArea extends React.Component {
     this.changeCharUp = this.changeCharUp.bind(this);
     this.render = this.render.bind(this);
     this.state = {
-      levels: { 1: false, 2: false, 3: false, 9: true };
+      levels: { 1: false, 2: false, 3: false },
       charUp: true,
-      showVocab: true,
+      showVocab: false,
     };
   }
 
   changeShowVocab(showVocab) {
-    console.log('change show vocab', showVocab);
+    console.log('change show vocab', showVocab, this.state);
     this.setState({
       showVocab,
     });
+    const levels = { 1: false, 2: false, 3: false };
     if (showVocab) {
-      const levels = { 1: false, 2: false, 3: false, 9: true };
-      this.setState({
-        levels,
-      });
+      levels[9] = true;
     }
+    this.setState({
+      levels,
+    });
   }
 
   changeCharUp(charUp) {
+    console.log('change char up lll', charUp);
     this.setState({
       charUp,
     });
@@ -55,18 +57,20 @@ class ExerciseArea extends React.Component {
     const {
       levels,
     } = this.state;
+    console.log('l',Object.keys(levels));
     return Object.keys(levels).map(lvl => (
       <BpkCheckbox
         className={STYLES.ExerciseArea__levelSelectors}
         name="levelSelector"
-        label={`HSK${lvl}`}
-        key={`HSK${lvl}`}
+        label={lvl === '9' ? 'Vocab' : `HSK${lvl}`}
+        key={lvl === '9' ? 'Vocab' : `HSK${lvl}`}
         onChange={() => { this.changeLevel(lvl); }}
         defaultChecked={levels[lvl]}
       />));
   }
 
   render() {
+    console.log(this.state,'state');
     const {
       showVocab,
       charUp,
@@ -75,14 +79,14 @@ class ExerciseArea extends React.Component {
     return (
       <BpkGridContainer className={STYLES.ExerciseArea} >
         <BpkGridRow>
-          <BpkGridColumn width={6} offset={3} mobileWidth={12} mobileOffset={0}>
+          <BpkGridColumn width={6} offset={3} mobileWidth={11} mobileOffset={0}>
             {this.renderLevelSelectors()}
+          </BpkGridColumn>
+          <BpkGridColumn width={1}>
+            <Settings changeShowVocab={this.changeShowVocab} changeCharUp={this.changeCharUp} showVocab={showVocab} charUp={charUp} />
           </BpkGridColumn>
         </BpkGridRow>
         <Character levels={this.state.levels} charUp={charUp} />
-        <BpkGridColumn width={12}>
-          <Settings changeShowVocab={this.changeShowVocab} changeCharUp={this.changeCharUp} showVocab={showVocab === true} charUp={charUp === true} />
-        </BpkGridColumn>
       </BpkGridContainer>
     );
   }

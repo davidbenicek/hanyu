@@ -19,14 +19,12 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 app.get('/char', function (req, res) {
-  const { level } = req.query
+  let { level } = req.query
+  if (!level) level = '1,2,3';
   let char = vocab[Math.floor(Math.random() * vocab.length)];
-  console.log(level, char.HSK);
-  if(level)
-    while(!level.includes(char.HSK)) {
-      char = vocab[Math.floor(Math.random() * vocab.length)];
-      console.log(level, char.HSK);
-    }
+  while(!level.includes(char.HSK)) {
+    char = vocab[Math.floor(Math.random() * vocab.length)];
+  }
   res.send(char);
 });
 

@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BpkGridContainer, BpkGridRow, BpkGridColumn } from 'bpk-component-grid';
 import BpkCheckbox from 'bpk-component-checkbox';
-import BpkText from 'bpk-component-text';
-import BpkCard from 'bpk-component-card';
 import BpkButton from 'bpk-component-button';
 import BpkModal from 'bpk-component-modal';
+import BpkLargeSettingsIcon from 'bpk-component-icon/lg/settings';
+import { withLargeButtonAlignment } from 'bpk-component-icon';
 
 import STYLES from './Settings.scss';
-import Character from '../Character';
+
+const AlignedSettingsIcon = withLargeButtonAlignment(BpkLargeSettingsIcon);
+
 
 class Settings extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
 
     this.state = {
@@ -19,6 +21,8 @@ class Settings extends React.Component {
       showVocab: props.showVocab,
       charUp: props.charUp,
     };
+    this.changeShowVocab = this.changeShowVocab.bind(this);
+    this.changeCharUp = this.changeCharUp.bind(this);
   }
 
   onOpen = () => {
@@ -34,24 +38,29 @@ class Settings extends React.Component {
   };
 
   changeShowVocab() {
+    console.log('change show vocab');
+    const showing = !this.state.showVocab;
     this.setState({
-      showVocabLevel: !this.state.showVocabLevel,
+      showVocab: showing,
     });
-    this.props.changeShowVocab(this.state.showVocabLevel);
+    this.props.changeShowVocab(showing);
   }
 
   changeCharUp() {
+    console.log('change char up xxx', this.state);
+    const up = !this.state.charUp;
     this.setState({
-      showCharUp: !this.state.showCharUp,
+      charUp: up,
     });
-    this.props.changeCharUp(this.state.showCharUp);
+    console.log('chaaarrr', up);
+    this.props.changeCharUp(up);
   }
 
   render() {
     return (
       <div id="setting-modal-container">
         <div id="settings">
-          <BpkButton onClick={this.onOpen}>Settings</BpkButton>
+          <BpkButton iconOnly secondary onClick={this.onOpen}><AlignedSettingsIcon /><span className="visually-hidden">Settings</span></BpkButton>
         </div>
         <BpkModal
           id="settings"
@@ -63,21 +72,28 @@ class Settings extends React.Component {
           getApplicationElement={() => document.getElementById('settings')}
           renderTarget={() => document.getElementById('setting-modal-container')}
         >
-          <div>
+          <div className={STYLES.Settings__form}>
             <BpkCheckbox
-              className={STYLES['']}
-              name="charUpToggle"
-              label="Show Chinese character fist"
+              className={STYLES.Settings__checkbox}
+              name="vocabLevelToggle"
+              label="Show vocab level"
               onChange={() => { this.changeShowVocab(); }}
               defaultChecked={this.state.showVocab}
             />
             <BpkCheckbox
-              className={STYLES['']}
-              name="vocabLevelToggle"
-              label="Show vocab level"
+              className={STYLES.Settings__checkbox}
+              name="charUpToggle"
+              label="Show Chinese character fist"
               onChange={() => { this.changeCharUp(); }}
               defaultChecked={this.state.charUp}
             />
+            <BpkButton
+              secondary
+              onClick={this.onClose}
+              className={STYLES.Settings__close}
+            >
+              Close
+            </BpkButton>
           </div>
         </BpkModal>
       </div>
