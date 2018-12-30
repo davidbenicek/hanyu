@@ -1,10 +1,9 @@
 {
     "scripts": {
-        "start": "node server && cd client && npm start"
+        "start": "node server & cd client && npm start"
     },
     "dependencies": {
         "express": "^4.16.2",
-        "node-cmd": "^3.0.0",
         "nodemon": "^1.12.1"
     }
 }
