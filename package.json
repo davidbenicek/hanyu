@@ -3,17 +3,8 @@
         "start": "node server && cd client && npm start"
     },
     "dependencies": {
-        "@google-cloud/vision": "^0.13.0",
-        "async-request": "^1.2.0",
         "express": "^4.16.2",
-        "google-map-react": "^0.25.0",
         "node-cmd": "^3.0.0",
-        "nodemon": "^1.12.1",
-        "prop-types": "^15.6.0",
-        "react-dropzone": "^4.2.3",
-        "request": "^2.83.0"
-    },
-    "devDependencies": {
-        "concurrently": "^3.5.1"
+        "nodemon": "^1.12.1"
     }
 }
